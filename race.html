@@ -1,0 +1,168 @@
+<html>
+<script>
+// Race Game by Sheyna Watkins
+
+function Person(name, speed, injuries) {
+  this.name = name;
+  // speed value goes from 0 to 5:
+  this.speed = speed;
+  // injuries value goes from 0 to 5:
+  this.injuries = injuries;
+  // every person starts at position 0:
+  this.position = 0;
+  // determines if player is injured:
+  this.notInjuried = function() {
+    return Math.floor(Math.random() * 6) < this.injuries;
+  }
+  // if player is not injured that advance:
+  this.advance = function () {
+    if (this.notInjuried()) {
+      this.position += this.speed;
+    }
+  }
+  // output of progress:
+  this.progressReport = function() {
+    return this.name + " is at " + this.position;
+  }
+  // Adds or subtract distance traveled based on decisions at forks
+  this.wrongWay = function (distance) {
+    this.position = this.position - distance;
+  }
+  this.rightWay = function (distance) {
+    this.position = this.position + distance;
+  }
+}
+
+var lena = new Person("Lena", 3, 4);
+var julian = new Person("Julian", 4, 3);
+
+alert("Lena and Julian were kidnapped and held hostage by scavengers in the scavengers' underground lair. After a fight they escape. But they must naivagate the tunnels back to the surface to safety before the scavengers can recapture them.");
+
+
+var pickPlayer = prompt("Pick a player: Lena or Julian?").toLowerCase();
+
+if (pickPlayer == "lena") {
+  lena.speed = prompt("How fast is Lena? (Scale: 0 to 5 -- 0 is slow)");
+  lena.speed = parseInt(lena.speed);
+  lena.injuries = prompt("How badly is Lena injured after fighting the scavengers? (Scale: 0 to 5 -- 0 is very injured, 5 is fine)");
+  lena.injuries = parseInt(lena.injuries);
+} else {
+  julian.speed = prompt("How fast is Julian? (Scale: 0 to 5 -- 0 is slow)");
+  julian.speed = parseInt(julian.speed);
+  julian.injuries = prompt("How badly is Julian injured after fighting the scavengers? (Scale: 0 to 5 -- 0 is very injured, 5 is fine)");
+  julian.injuries = parseInt(julian.injuries);
+}
+
+// Runs program untill player reaches a fork:
+var runAway = function(forkPoint) {
+  while (lena.position < forkPoint && julian.position < forkPoint) {
+    lena.advance();
+    julian.advance();
+    console.log(lena.progressReport() + " | " + julian.progressReport());
+  }
+}
+
+// Variable declarations
+var twoWay = "There is a fork in the tunnel. Do you go left or right?";
+var threeWay = "There is a 3-way fork in the tunnel. Do you go left, right or center?";
+var fork;
+
+// Alert functions:
+var shortCutAlert = function() {
+  alert("You found a short cut!");
+}
+var takeYouLongerAlert = function() {
+  alert("This way will work, but it will take you longer.");
+}
+var deadEndAlert = function() {
+  alert("Ohps! The tunnel dead ends. You have to double back");
+}
+var forkPrompt = function(message) {
+  fork = prompt(message).toLowerCase();
+  }
+
+runAway(30);
+
+forkPrompt(twoWay);
+
+if (fork == "left" && pickPlayer == "lena") {
+  lena.wrongWay(18);
+  deadEndAlert();
+} else if (fork == "left" && pickPlayer == "julian") {
+  julian.wrongWay(18);
+  deadEndAlert();
+}
+
+runAway(47);
+
+forkPrompt(twoWay);
+
+if (fork == "right" && pickPlayer == "lena") {
+  lena.rightWay(15);
+  shortCutAlert();
+} else if (fork == "right" && pickPlayer == "julian") {
+  julian.rightWay(15);
+  shortCutAlert();
+}
+
+runAway(65);
+
+forkPrompt(threeWay);
+
+if (fork == "right" && pickPlayer == "lena") {
+  lena.wrongWay(15);
+  takeYouLongerAlert();
+} else if (fork == "right" && pickPlayer == "julian") {
+  julian.wrongWay(15);
+  takeYouLongerAlert();
+} else if (fork == "center" && pickPlayer == "lena") {
+  lena.rightWay(16);
+  shortCutAlert();
+} else if (fork == "center" && pickPlayer == "julian") {
+  julian.rightWay(16);
+  shortCutAlert();
+}
+
+runAway(73);
+
+forkPrompt(twoWay);
+
+if (fork == "right" && pickPlayer == "lena") {
+  lena.wrongWay(13);
+  deadEndAlert();
+} else if (fork == "right" && pickPlayer == "julian") {
+  julian.wrongWay(13);
+  deadEndAlert();
+}
+
+runAway(88);
+
+forkPrompt(threeWay);
+
+if (fork == "center" && pickPlayer == "lena") {
+  lena.wrongWay(12);
+  takeYouLongerAlert();
+} else if (fork == "center" && pickPlayer == "julian") {
+  julian.wrongWay(12);
+  takeYouLongerAlert();
+} else if (fork == "left" && pickPlayer == "lena") {
+  lena.rightWay(15);
+  shortCutAlert();
+} else if (fork == "left" && pickPlayer == "julian") {
+  julian.rightWay(15);
+  shortCutAlert();
+}
+
+runAway(100);
+
+// Results:
+if (lena.position < 70 && julian.position >= 100) {
+  alert(lena.progressReport() + " | " + julian.progressReport() + ". Julian made it out, but Lena was recaptured by the scavengers.");
+} else if (julian.position < 70 && lena.position >= 100) {
+  alert(lena.progressReport() + " | " + julian.progressReport() + ". Lena made it out, but Julian was recaptured by the scavengers.");
+} else {
+  alert(lena.progressReport() + " | " + julian.progressReport() + ". Lena and Julian both made it to safety.");
+}
+
+</script>
+</html>
